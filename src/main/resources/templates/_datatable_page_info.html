@@ -1,0 +1,70 @@
+ <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+		xmlns:th="http://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+
+<body>
+ 
+ 	 <!-- Pagination Bar http://www.dzone.com/links/r/implement_bootstrap_pagination_with_springdata_an.html -->
+	<div layout:fragment="paginationbar">
+	 
+	  <nav>
+	    <ul  class="pager">
+	      <li th:class="${page.firstPage}? 'disabled' : ''">
+	        <span th:if="${page.firstPage}">&larr; First</span>
+	        <a class="paginacao" th:if="${not page.firstPage}" th:href="@{${page.url}(page.page=1,page.size=${page.size})}">&larr; First</a>
+	      </li>
+	      <li th:class="${page.hasPreviousPage}? '' : 'disabled'">
+	        <span th:if="${not page.hasPreviousPage}">&laquo;</span>
+	        <a class="paginacao" th:if="${page.hasPreviousPage}" th:href="@{${page.url}(page=${page.number-1},page=${page.size})}" title="Go to previous page">&laquo;</a>
+	      </li>
+	      <li th:each="item : ${page.items}" th:class="${item.current}? 'active' : ''">
+	        <span th:if="${item.current}" th:text="${item.number}">1</span>
+	        <a class="paginacao" th:if="${not item.current}" th:href="@{${page.url}(page=${item.number},page=${page.size})}"><span th:text="${item.number}">1</span></a>
+	      </li>
+	      <li th:class="${page.hasNextPage}? '' : 'disabled'">
+	        <span th:if="${not page.hasNextPage}">&raquo;</span>
+	        <a class="paginacao" th:if="${page.hasNextPage}" th:href="@{${page.url}(page=${page.number+1},page=${page.size})}" title="Go to next page">&raquo;</a>
+	      </li>
+	      <li th:class="${page.lastPage}? 'disabled' : ''">
+	        <span th:if="${page.lastPage}">Last &rarr;</span>
+	        <a class="paginacao" th:if="${not page.lastPage}" th:href="@{${page.url}(page=${page.totalPages},page=${page.size})}">Last &rarr;</a>
+	      </li>
+	    </ul>
+	  </nav>
+	  <script type="text/javascript" th:inline="javascript">
+		$(function(){
+		 
+			
+			$(".paginacao").click( function() {
+				 
+				
+				var elem = $(this);
+				/*[+
+				
+				var selector  = [[${render}]];
+
+				+]*/
+				
+				$.ajax({
+	                url :  elem.attr('href'), 
+	                data : { idConnection:  $( "#select_server" ).val()	 } ,
+	                type:"get",
+	                dataType: 'html',
+	                success : function(data) {			
+	                	$(selector).html( data )	                	
+	                    return false;
+	                },
+	                error: function(xhr){ 
+	                    console.log(xhr.responseText);
+	                }
+	            }); 
+				 return false;
+			} );
+		});
+		
+		</script>
+	</div>
+	
+</body>
+</html>

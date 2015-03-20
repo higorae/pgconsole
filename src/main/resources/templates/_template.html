@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title th:text="${title}">Title</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+	 <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+	
+	<!-- Load jQuery -->
+   	<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+   	<script src="//code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>  		
+   	<script src="//cdn.jsdelivr.net/jquery.fancytree/2.4.1/jquery.fancytree-all.min.js" ></script>    	     	 
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<style type="text/css">
+			body {
+			  padding-top: 50px;
+			}  				 		
+	 </style>	
+</head>
+<body role="document">
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="form-group">         
+          <a class="navbar-brand" href="#"> PGConsole</a> 
+          </div>
+        </div>
+        <div class="navbar-collapse collapse">
+        	 
+	          <ul class="nav navbar-nav">
+	            <li class="active"><a href="${createLink(controller:'console', action:'index')}">Console</a></li>
+	            <li><a href="#about">New Connection</a></li>
+	            <li><a href="#contact">Search Object</a></li>
+	          </ul>       					
+	   </div>          			
+     </div><!--/.container-fluid -->
+   </div>
+ 
+
+    <div class="container-fluid" role="main">
+ 	 
+
+    </div>
+</body>
+</html>

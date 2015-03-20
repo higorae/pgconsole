@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+	<title th:text="${title}">Title</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+	 <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+	
+	<!-- Load jQuery -->
+   	<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+   	<script src="//code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>  		
+   	<script src="//cdn.jsdelivr.net/jquery.fancytree/2.4.1/jquery.fancytree-all.min.js" ></script>    	     	 
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>	
+	<script src="http://cdn.jsdelivr.net/jquery.validation/1.13.1/jquery.validate.min.js"></script>
+	<script src="http://cdn.jsdelivr.net/jquery.validation/1.13.1/additional-methods.min.js"></script>
+	<script src="//cdn.jsdelivr.net/highlight.js/8.3/highlight.min.js"></script>
+	<script th:src="@{/js/sweet-alert.min.js}" src="../static/js/sweet-alert.min.js" ></script>
+	
+	<link rel="stylesheet" th:href="@{/css/highlight-sql.min.css}" href="../static/css/highlight-sql.min.css" />
+	<link rel="stylesheet" th:href="@{/css/agenda.css}" href="../static/css/agenda.css" />
+	<link rel="stylesheet" th:href="@{/css/sweet-alert.css}" href="../static/css/sweet-alert.css" /> 
+	
+	 
+	<style type="text/css">
+			body {
+			  padding-top: 50px; 
+			  
+			}  				
+			#toTop{
+				position: fixed;
+				bottom: 10px;
+				right: 10px;
+				cursor: pointer;
+				display: none;
+			} 	
+			modal .modal-body {
+			    max-height: 420px;
+			    overflow-y: 420px;
+			}	
+			
+			 table { 
+			}
+			
+			.div-table-content {
+			  	max-height:250px;
+			  overflow-y:auto;
+			}
+			 
+						
+	 </style>	
+	   
+</head>
+<body role="document">
+
+  	
+	<div th:include="_header_menu :: header_menu"></div>
+ 
+
+    <div class="container-fluid" role="main">
+ 	
+		 
+ 
+	<div class="row-fluid">
+	
+	
+		<div class="tabbable"> <!-- Only required for left/right tabs -->
+		    <ul class="nav nav-tabs">
+			    <li class="active">
+			    	<a href="#tab1" data-toggle="tab">Console</a>
+			    </li>
+			    <li>
+			    	<a href="#tab2" data-toggle="tab">Server Tree Navigation</a>
+			    </li>
+			     <li>
+			    	<a href="#tab3" data-toggle="tab" id="link_reload_history">History</a>
+			    </li>
+			    
+			     <li>
+			    	<a href="#tab5" data-toggle="tab">SQL Statements Repository</a>
+			    </li>
+			    			    
+			     <li>
+			    	<a href="#tab6" data-toggle="tab">Edit Connection Settings</a>
+			   	 </li>
+		    </ul>
+		    <div class="tab-content">
+			    <div class="tab-pane active" id="tab1"> 
+				 
+						<div id="editor" class="my-code-area"  style="width: 100%; height:400px;"></div>
+						<span id="save_status"></span>
+						 
+						 <p/>
+						<input type="button" id="execute-sql" value="Run >>" class="btn btn-success  btn-xs" />
+						<input type="button"  id="format-sql"  value="SQL Beautifier" class="btn btn-default  btn-xs" />
+						
+						<a data-toggle="modal" data-target="#keyboard-shortcuts" class="pull-right">Keyboard Shortcuts</a>
+					   	<hr/>
+					   	
+					   	<div id="ajax_loading">					   	 
+					   		<img alt="Wait..." src="../static/img/ajax.gif" th:src="@{/img/ajax.gif}" />
+					   	</div>
+						<div id="result">
+							No Query yet executed
+						</div>
+			    </div>
+			    <div class="tab-pane" id="tab2">
+			    
+			    
+			    	<div class="row">
+					  <div class="col-xs-6">					  			   
+			    		<hr />		
+			    		
+						<div id="tree">
+							
+						</div>
+					  </div>
+					  <div class="col-xs-6">
+					  	<div>Active node: <span id="echoActive1">-</span></div>
+					  	<div>Selection: <span id="echoSelection1">-</span></div>
+					  	
+					   
+					  	<pre class=""><code class="sql" style="width:100%" id="objectDescription"></code></pre>	
+					  	 						
+					  </div>
+					</div>
+			     
+					  
+						
+			    </div>
+			     <div class="tab-pane" id="tab3">
+			    	<div id="history">					   
+			    		    	
+			    	</div>	 						
+			    </div>
+			     <div class="tab-pane" id="tab4">
+			    			 
+						
+			    </div>
+			    
+			    <div class="tab-pane" id="tab5">
+			    			 
+						
+			    </div>
+			    
+			      
+			    <div class="tab-pane" id="tab6">
+			    			 
+						
+			    </div>
+		    </div>
+	    </div>
+ 
+	 </div>	 
+	  
+	<div th:include="_modal_shortcuts :: keyboard_shortcuts"></div>
+	
+	<div th:include="_modal_new_connection :: modal_new_connection"></div>	
+	
+	<div th:include="_modal_save_queries :: modal_save_queries"></div>
+ 
+	
+	<script src="//cdn.jsdelivr.net/ace/1.1.7/min/ace.js" type="text/javascript"></script>
+	<script src="//cdn.jsdelivr.net/ace/1.1.7/min/theme-twilight.js"  type="text/javascript"></script>
+	<script src="//cdn.jsdelivr.net/ace/1.1.7/noconflict/mode-sql.js"  type="text/javascript"></script>
+	<script src="//cdn.jsdelivr.net/ace/1.1.7/min/ext-language_tools.js" type="text/javascript"></script>
+	
+	<script th:inline="javascript">		 
+	 
+		var editorPreviewSave = ace.edit("editor-preview-save");
+		editorPreviewSave.setShowPrintMargin( false );  
+		editorPreviewSave.setTheme("ace/theme/textmate");
+		editorPreviewSave.getSession().setMode("ace/mode/sql");
+		editorPreviewSave.setReadOnly(true); 
+		
+		
+	
+		var editor = ace.edit("editor");
+	    editor.setShowPrintMargin( false );  
+		editor.setTheme("ace/theme/textmate");
+		editor.getSession().setMode("ace/mode/sql");
+		editor.setOptions({enableBasicAutocompletion: true});
+		var langTools = ace.require("ace/ext/language_tools");
+		 
+
+		var rhymeCompleter = {
+		        getCompletions: function(editor, session, pos, prefix, callback) {
+		            if (prefix.length === 0) { callback(null, []); return }
+		            
+		            $.getJSON(
+		            	"/console/autocomplete", {token :  prefix , idConnection : $( "#select_server" ).val() })
+		            	.done (function(wordList) {  
+		                    // wordList like [{"word":"flow","freq":24,"score":300,"flags":"bc","syllables":"1"}]
+		                    callback(null, wordList.map(function(ea) {
+		                        return {name: ea.word, value: ea.word, score: ea.score, meta: ea.flags}
+		                    }));
+		                });
+		        }
+		    };
+		langTools.addCompleter(rhymeCompleter);
+		
+		var sourceFancyTree = {
+				 url: "/serverExplorer",
+			     data: {mode: "children", connection:  $( "#select_server" ).val() },
+			}
+		
+		
+		var executeSqlHandler = function(){
+			var $loading = $('#ajax_loading').show();
+			
+			selectionRange = editor.getSelectionRange(); 		
+			querystring = editor.session.getTextRange(selectionRange); 
+			connection = $( "#select_server" ).val()
+			
+			$.ajax({
+                url : '/console/run',
+                data : { queries :  querystring, idConnection: connection } ,
+                type:"post",
+                dataType: 'html',
+                success : function(data) {			            
+                	console.log(data); 
+                    $('#result').html(data);
+                    return false;
+                },
+                error: function(xhr){ 
+                    console.log(xhr.responseText);
+                }
+            })
+           $loading.hide();
+			$('#editor').focus();
+		}
+		
+		var saveSqlHandler = function(){
+			selectionRange = editor.getSelectionRange(); 		
+			querystring = editor.session.getTextRange(selectionRange); 			
+			editorPreviewSave.setValue(querystring)
+			editorPreviewSave.gotoLine(1, 0, false)
+			$("#save-modal-title").text( $("#select_server option:selected").text() )
+			
+			$('#title-save-sql').focus();
+			$("#save-sql").modal("show")
+		}
+
+		editor.commands.addCommand({
+		    name: "execute-sql-f5",
+		    bindKey: {win: "F5", mac: "Command-Option-F5"},
+		    exec: function(editor) {		       
+		       executeSqlHandler()
+		       return;
+		    }
+		});
+		
+		editor.commands.addCommand({
+		    name: "execute-sql-alt-enter",
+		    bindKey: {win: "Ctrl-Enter"},
+		    exec: function(editor) {		       
+		       executeSqlHandler()
+		       return;
+		    }
+		});
+		
+		
+		editor.commands.addCommand({
+		    name: "overide-save",
+		    bindKey: {win: "Ctrl-S", mac: "Command-S"},
+		    exec: function(editor) {		       
+		    	saveSqlHandler()
+		       return;
+		    }
+		}); 
+		
+		document.getElementById('editor-preview-save').style.fontSize='16px';
+		document.getElementById('editor').style.fontSize='16px';
+		
+		$(function(){
+
+			
+			var $loading = $('#ajax_loading').hide();
+		  
+			 $("#tree").fancytree({ 
+					icons: true,
+					selectMode: 1,				
+					source: sourceFancyTree,
+					activate: function(event, data) {
+				        $("#echoActive1").text('SELECIONADO ' + data.node.title);
+				        var node = data.node;
+				        $.ajax({
+			                url : '/serverExplorer/objectDescription',
+			                data: {mode: "children", parent: node.key, type: node.data.type, database: node.data.database , schema: node.data.schema, table: node.data.table },
+			                type:"post",
+			                dataType: 'text',
+			                success : function(data) {			 
+				                          	                	
+		                		$('#objectDescription').html( data );
+		               		 	$('pre code').each(function(i, block) {
+	                		    	hljs.highlightBlock(block);
+	                		  	});
+				                
+			                    return false;
+			                },
+			                error: function(xhr){ 
+			                    console.log(xhr.responseText);
+			                }
+			            })
+				      },
+				      select: function(event, data) {
+				        // Display list of selected nodes
+				        var s = data.tree.getSelectedNodes().join(", ");
+				        $("#echoSelection1").text(s + " - " + data.node.data.type);
+
+					    
+			            
+				      },
+				      dblclick: function(event, data) {
+				        data.node.toggleSelected();
+				      },
+				      keydown: function(event, data) {
+				        if( event.which === 32 ) {
+				          data.node.toggleSelected();
+				          return false;
+				        }
+				      },
+				      lazyLoad: function(event, data){
+				          var node = data.node;
+				         
+				          data.result = {
+				            url: "/serverExplorer/lazyLoading",
+				            data: {mode: "children", parent: node.key, type: node.data.type, database: node.data.database , schema: node.data.schema, table: node.data.table },
+				            cache: false
+				          };
+				      }
+				 });
+			 
+		 	setInterval(function(){ 
+				connection = $( "#select_server" ).val()				 	
+				querystring = editor.session.getValue() 
+				$.ajax({
+	                url :  '/console/autoSave', 
+	                data : { code :  querystring , idConnection: connection } ,
+	                type:"post",
+	                dataType: 'json',
+	                success : function(data) {			            	                	
+	                	$('#save_status').html( '<span class="glyphicon glyphicon-ok"></span> ' + data.message );
+	                    return false;
+	                },
+	                error: function(xhr){ 
+	                    console.log(xhr.responseText);
+	                }
+	            })
+	            
+				$('#editor').focus();
+				
+			}, 60000); // 1 min
+            
+			// Get selected text 
+			$('#execute-sql').click(executeSqlHandler);
+
+			$( "#select_server" ).change(function() {
+				querystring = editor.session.getValue()  
+				selectedConnection = this.value
+				$.ajax({
+	                url : '/console/changeConnection',
+	                data : { idConnection : selectedConnection , code: querystring } ,
+	                type:"post",
+	                dataType: 'json',
+	                success : function(json) {
+	                	editor.setValue( json.code );	 	
+	                	editor.gotoLine(1, 0, false)
+	                	$.getJSON( sourceFancyTree.url , {mode: "children", connection:  selectedConnection } )
+	                	 .done(function( json ) {
+	                		console.log( "JSON Data: " + JSON.stringify(json) );
+	                		$("#tree").fancytree("getTree").reload( json );
+	                		swal( {title: "changed connection!", text:  json.message , type: "success"});
+	                	}).fail(function( jqxhr, textStatus, error ) {
+		                	var err = textStatus + ", " + error;
+		                	console.log( "Request Failed: " + err );
+		                	swal( {title: "changed connection failed!", text:  json.message , type: "error"});
+	                	});
+ 
+	                	return false;	                		                    
+	                },
+	                error: function(xhr){ 
+	                    console.log(xhr.responseText);
+	                }
+	            });
+
+			});
+			
+			$("#link_reload_history").click(function(){
+				//$('#history').html('<asset:image src="ajax-loading.gif"/>');
+				$.ajax({
+	                url : '/console/history',
+	                data : { idConnection: $( "#select_server" ).val() } ,
+	                type:"get",
+	                dataType: 'html',
+	                success : function(data) {			            	                	
+	                	$('#history').html( data );
+	                	 /* $('pre code').each(function(i, block) {
+	                		    hljs.highlightBlock(block);
+	                		  });
+               		   */
+	                    return false;
+	                },
+	                error: function(xhr){ 
+	                    console.log(xhr.responseText);
+	                }
+	            })
+			});
+
+			$('#format-sql').click(function() {
+				connection = $( "#select_server" ).val()				 	
+				selectionRange = editor.getSelectionRange(); 		
+				querystring = editor.session.getTextRange(selectionRange);
+				
+				$.ajax({
+	                url : '/console/sqlformatter',  
+	                data : { code :  querystring , connectionId: connection } ,
+	                type:"post",
+	                dataType: 'json',
+	                success : function(data) {	                
+	                	editor.session.replace( selectionRange , data.code );	                	 
+	                    return false;
+	                },
+	                error: function(xhr){ 
+	                    console.log(xhr.responseText);
+	                }
+	            })
+	            
+				$('#editor').focus();
+			});
+
+			// TO TOP
+		      $('body').append('<div id="toTop" class="btn btn-info"><span class="glyphicon glyphicon-chevron-up"></span> Back to Top</div>');
+		    	$(window).scroll(function () {
+					if ($(this).scrollTop() != 0) {
+						$('#toTop').fadeIn();
+					} else {
+						$('#toTop').fadeOut();
+					}
+				}); 
+		    $('#toTop').click(function(){
+		        $("html, body").animate({ scrollTop: 0 }, 600);
+		        return false;
+		    });
+		    
+		    
+		    $("#logoff").click(function(){
+				swal({
+					  title: "Are you sure?",
+					  text: "Do you really want to leave the system? Not saved queries will be lost!",
+					  type: "warning",
+					  showCancelButton: true,
+					  confirmButtonColor: "#DD6B55",
+					  confirmButtonText: "Yes!",
+					  cancelButtonText: "No, cancel plx!",
+					  closeOnConfirm: false
+					},
+					function(isConfirm){
+					  if (isConfirm) { 
+					   
+					    var jqxhr = $.get( "/logout", function() {
+					    	location.reload();
+						}) 
+						.fail(function() {
+							swal("Failed", "could not perform the operation", "error");
+						});
+					  } else {
+	 					return false;
+						}
+					});
+			});
+			  
+			
+          });
+			
+		</script>		
+    </div>
+</body>
+</html>

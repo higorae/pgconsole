@@ -1,0 +1,55 @@
+ <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+ 
+<head>
+</head>
+ 
+<body>
+	<div th:fragment="header_menu">	 	
+	  	  <!-- Fixed navbar -->
+		    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+		      <div class="container-fluid">
+		        <div class="navbar-header">
+		          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+		            <span class="sr-only">Toggle navigation</span>
+		            <span class="icon-bar"></span>
+		            <span class="icon-bar"></span>
+		            <span class="icon-bar"></span>
+		          </button>
+		          <div class="form-group">   
+		          
+		          <a class="navbar-brand" href="#"> PGConsole</a>    
+		         	 
+		          </div>
+		        </div>
+		        <div class="navbar-collapse collapse">
+		        	 
+			          <ul class="nav navbar-nav">
+			      
+			            <li class="active"><a href="#">Console</a></li>
+			            <li><a href="#about"  data-toggle="modal" data-target="#new-connection"  >New Connection</a></li>
+			             
+			          </ul>       			          	 
+			  	 		  
+					  <form class="navbar-form navbar-right" role="form">
+			            <div class="form-group">   	           	                      
+			              	<select id="select_server" class="form-control">
+						      	<option value="0">Select one connection</option>
+						      	
+						      	<option th:each="connection : ${connections}" 
+								          th:value="${connection.id}" 
+								          th:text="${connection.description}">Connection Server 01</option>
+								           
+							</select>
+							 				 
+							<a id="logoff"  class="btn btn-warning">Logoff</a>
+							 					
+			            </div>          
+			          </form>          													
+			   </div>          			
+		     </div><!--/.container-fluid -->
+		   </div>
+	</div>
+</body>
+</html>
