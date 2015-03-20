@@ -35,7 +35,7 @@ class SqlLookup {
 	private void internalScanSqlFiles() {
 		try { 
 			Resource[] resources = resourcePatternResolver.getResources(rootDirectory + UNDERNEATH_SQL_PATTERN );
-			String baseResourceAsString = resourcePatternResolver.getResource(rootDirectory).getURI().toString() + File.separator;
+			String baseResourceAsString = resourcePatternResolver.getResource(rootDirectory).getURI().toString() + "/";
 			
 			for ( Resource r : resources ){
 				String key = findKeyNameForResource(r, baseResourceAsString);
