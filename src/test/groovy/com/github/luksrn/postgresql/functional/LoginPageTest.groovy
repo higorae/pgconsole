@@ -5,12 +5,25 @@ import geb.spock.GebSpec
 class LoginPageTest extends GebSpec {
 	
 	 
-	def "cat user get login page?"() {
+	def "cat user get login page and sing in with default admin user?"() {
 		when:
-         to LoginPage
+        	to LoginPage
  
 		then:
-       	assert at(LoginPage)
+       		assert at(LoginPage)
+		   
+		 when:
+		 	loginForm.with {
+				 username = "admin"
+				 password = "admin"
+			 }
 
+			 loginButton.click()		 
+ 
+		then:
+			assert at(ConsolePage)
+			
+	 
+		 
     }
 }
