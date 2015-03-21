@@ -34,6 +34,7 @@ apply plugin: 'spring-boot'
 apply plugin: 'war'
 
 apply from: "gradle/osSpecificDownloads.gradle"
+apply from: "gradle/ci.gradle"
 
 war {
     baseName = 'postgresql'
