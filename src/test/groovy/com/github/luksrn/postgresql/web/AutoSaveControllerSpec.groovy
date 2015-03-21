@@ -23,7 +23,7 @@ class AutoSaveControllerSpec extends Specification {
 		connectionRepository = Mock()
 		userWipRepository = Mock()
 		principal = Mock()
-		connection = Mock
+		connection = Mock()
 		instance = new AutoSaveController(connectionRepository, userWipRepository)	
 	}
 	
