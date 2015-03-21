@@ -3,6 +3,7 @@ package com.github.luksrn.postgresql.serverinfo
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.github.luksrn.postgresql.domain.Connection;
 import com.github.luksrn.postgresql.helper.CurrentConnectionResolver;
 import com.github.luksrn.postgresql.helper.SqlLookup;
 
