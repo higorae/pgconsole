@@ -36,13 +36,14 @@ apply plugin: 'war'
 apply from: "gradle/osSpecificDownloads.gradle"
 apply from: "gradle/ci.gradle"
 
+
 war {
     baseName = 'postgresql'
     version = '0.0.1-SNAPSHOT'
 }
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
 
 repositories {
     mavenCentral()
