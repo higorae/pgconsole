@@ -48,6 +48,6 @@ class ConnectionController {
 
 		connectionRepository.save(connection)
 		connection.group = serverGroupRepository.findOne(connection.group.id)
-		[ 'result' : connection ]
+		[ 'result' : connection, 'message': 'Connection created with success!' ]
 	}
 }
