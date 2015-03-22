@@ -30,7 +30,13 @@ xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 	                	console.log(data);
 	                	
 	                	$("#alert_create_connection_success").show();
-	                    return false;
+	                	setTimeout(function() {
+	                		var form = $("#new-connection");
+	                        form.modal('hide');
+	                        form.find('input:text').val('');
+	                        $("#alert_create_connection_success").hide();
+	                    }, 1000);
+	                	$("#select_server").append(new Option(data.result.description, data.result.key));
 	                },
 	                error: function(xhr){ 
 	                    
