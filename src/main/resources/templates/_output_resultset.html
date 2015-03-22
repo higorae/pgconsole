@@ -7,44 +7,54 @@
 <body>
 	<div th:fragment="resultset" th:unless="${#lists.isEmpty(queriesResultMetaData)}" class="results-block table-striped">
 	 	 
+	
+    
 		 <div class="table-responsive" th:each="resultMetaData : ${queriesResultMetaData}">
-		 	 	 <table  class="table table-bordered" >
-			 
-				<thead>
-					<tr >
-						<td th:colspan="${resultMetaData.numberOfCols == 0} ? 10 : ${resultMetaData.numberOfCols}">			
-														
-							<span class="glyphicon glyphicon-ok"  th:if="${resultMetaData.executedWithSuccess}" ></span>
-							 
-							<span class="glyphicon glyphicon-remove" th:if="${ ! resultMetaData.executedWithSuccess}"></span>
-								 						
-							<b th:text="${resultMetaData.statement}"> SELECT foo FROM bar</b> - <span th:text="|Execution time: ${{resultMetaData.executionTime}} ms. ${{resultMetaData.numberOfRowsAffected}} rows affected|">Execution time: 001 ms. 350 rows affected</span>
-						</td>
-					</tr>
+		 
+		  	 <div class="row">
+    			<div style="overflow: auto">
+			 	 	 <table th:id="${resultMetaData.executedWithSuccess} ? 'table_resultset' : 'erro_table_resultset'" class="table table-bordered" >
 				 
-					<tr th:if="${! resultMetaData.executedWithSuccess }">
-						<td th:colspan="${resultMetaData.numberOfCols == 0} ? 10 : ${resultMetaData.numberOfCols}">						
-							<b th:text="${resultMetaData.message}">${resultMetaData.message}</b>
-						</td>
-					</tr>	 
-					
-					<tr class="active">						
-						<td th:each="columnName : ${resultMetaData.columnNames}">
-							<strong th:text="${columnName}">${columnName}</strong>
-						</td>					
-					</tr>
-				</thead>		 
-					<tbody>						
-						<tr th:each="row : ${resultMetaData.result}">
-							
-							<td th:each="tuple : ${row}" style="white-space: nowrap;">
-								<span th:text="${tuple.value}"></span>
+					<thead>
+						<tr >
+							<td th:colspan="${resultMetaData.numberOfCols == 0} ? 10 : ${resultMetaData.numberOfCols}">			
+															
+								<span class="glyphicon glyphicon-ok"  th:if="${resultMetaData.executedWithSuccess}" ></span>
+								 
+								<span class="glyphicon glyphicon-remove" th:if="${ ! resultMetaData.executedWithSuccess}"></span>
+									 						
+								<b th:text="${resultMetaData.statement}"> SELECT foo FROM bar</b> - <span th:text="|Execution time: ${{resultMetaData.executionTime}} ms. ${{resultMetaData.numberOfRowsAffected}} rows affected|">Execution time: 001 ms. 350 rows affected</span>
 							</td>
+						</tr>
+					 
+						<tr th:if="${! resultMetaData.executedWithSuccess }">
+							<td th:colspan="${resultMetaData.numberOfCols == 0} ? 10 : ${resultMetaData.numberOfCols}">						
+								<b th:text="${resultMetaData.message}">${resultMetaData.message}</b>
+							</td>
+						</tr>	 
 						
-						</tr>					
-					</tbody>				 
-			 </table>						
+						<tr class="active">						
+							<td th:each="columnName : ${resultMetaData.columnNames}">
+								<strong th:text="${columnName}">${columnName}</strong>
+							</td>					
+						</tr>
+					</thead>		 
+						<tbody>						
+							<tr th:each="row : ${resultMetaData.result}">
+								
+								<td th:each="tuple : ${row}" style="white-space: nowrap;">
+									<span th:text="${tuple.value}"></span>
+								</td>
+							
+							</tr>					
+						</tbody>				 
+				 </table>	
+			 	</div>
+			 	</div>
+			 	
+			 	<hr/>					
 		</div>
 	</div>
+
 </body>  
 </html>

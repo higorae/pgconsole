@@ -21,10 +21,19 @@
 	<script src="//cdn.jsdelivr.net/highlight.js/8.3/highlight.min.js"></script>
 	<script th:src="@{/js/sweet-alert.min.js}" src="../static/js/sweet-alert.min.js" ></script>
 	
+	<!-- DataTables -->
+	
+		<script type="text/javascript" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+		
+
 	<link rel="stylesheet" th:href="@{/css/highlight-sql.min.css}" href="../static/css/highlight-sql.min.css" />
 	<link rel="stylesheet" th:href="@{/css/agenda.css}" href="../static/css/agenda.css" />
 	<link rel="stylesheet" th:href="@{/css/sweet-alert.css}" href="../static/css/sweet-alert.css" /> 
+	<!-- DataTables CSS -->
 	
+	<link rel="stylesheet"  href="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css"/>
+  
 	 
 	<style type="text/css">
 			body {
@@ -226,8 +235,14 @@
                 success : function(data) {			            
                 	console.log(data); 
                     $('#result').html(data);
+                    
+
                     $('input[id="execute-sql"]').prop('disabled', false);
-                    $('#ajax_loading').hide();                    
+                    $('#ajax_loading').hide(); 
+                    if ( $("*[id^='table_resultset']").length ){
+                    	$("*[id^='table_resultset']").DataTable();
+                    }
+                                       
                     return false;
                 },
                 error: function(xhr){ 
