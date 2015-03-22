@@ -6,62 +6,7 @@ xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 </head>
  
 <body>
-	<div th:fragment="modal_new_connection">	 
-	
-		<script th:inline="javascript">
-		$(function(){
-			$("#alert_create_connection").hide()
-			
-	        $("#alert_create_connection_success").hide();
-			
-			$("#crate_connection_button").click(function(){
-				//$('#history').html('<asset:image src="ajax-loading.gif"/>');
-				$.ajax({
-	                url : '/connection/create',
-	                data : { host: $( "#host" ).val(),
-	                		port: $("#port").val(),
-	                		database: $("#database").val(),
-	                		username: $("#username").val(),
-	                		password: $("#password").val(),
-	                		groupId: $("#groupId").val()} ,
-	                type:"post",
-	                dataType: 'json',
-	                success : function(data) {			            	                	
-	                	console.log(data);
-	                	
-	                	$("#alert_create_connection_success").show();
-	                	setTimeout(function() {
-	                		var form = $("#new-connection");
-	                        form.modal('hide');
-	                        form.find('input:text').val('');
-	                        $("#alert_create_connection_success").hide();
-	                    }, 1000);
-	                	$("#select_server").append(new Option(data.result.description, data.result.key));
-	                },
-	                error: function(xhr){ 
-	                    
-	                    var json = xhr.responseJSON
-	                    console.log( json );
-	                    if ( json.fieldErrors != null ){
-	                    	  
-	                    	$("#alert_create_connection_msg").text(json.message);
-	                    	$("#alert_create_connection_msg").append("<ul>");
-	                    	
-	                    	$.each( json.fieldErrors, function( key, value ) {
-	                    		$("#alert_create_connection_msg").append( "<b>" + value.field + "</b>: " + value.message + "<br/>" );
-	                    	});
-	                    	$("#alert_create_connection_msg").append("</ul>");	                    	 
-	                    	
-	                		$("#alert_create_connection").show();
-	                	}
-	                }
-	            })
-			}); 
-		});
-			
-		</script>	
-		
-		 
+	<div th:fragment="modal_new_connection">	 		 
 		 <div id="new-connection" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 		  <div class="modal-dialog modal-lg">
 		    <div class="modal-content">
@@ -75,7 +20,7 @@ xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 					<div id="alert_create_connection_success" class="alert alert-success alert-dismissible" role="alert">
 					  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					  
-					  <div> Connection created with success! </div>
+					  <div><span class="message"></span></div>
 					</div>
 					
 					<div id="alert_create_connection" class="alert alert-danger alert-dismissible" role="alert">
@@ -154,7 +99,8 @@ xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			        <button id="crate_connection_button" type="submit" class="btn btn-primary">Save changes</button>
+			        <button id="create_connection_button" type="submit" class="btn btn-primary">Save</button>
+			        <button id="create_and_connect_button" type="submit" class="btn btn-info">Save and connect</button>
 			      </div>
 			    
 		    </div>
