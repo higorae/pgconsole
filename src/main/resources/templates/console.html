@@ -210,7 +210,7 @@
 		
 		
 		var executeSqlHandler = function(){
-			var $loading = $('#ajax_loading').show();
+			$('#ajax_loading').show();
 			
 			selectionRange = editor.getSelectionRange(); 		
 			querystring = editor.session.getTextRange(selectionRange); 
@@ -224,13 +224,15 @@
                 success : function(data) {			            
                 	console.log(data); 
                     $('#result').html(data);
+                    $('#ajax_loading').hide();
                     return false;
                 },
                 error: function(xhr){ 
                     console.log(xhr.responseText);
+                    $('#ajax_loading').hide();
                 }
             })
-           $loading.hide();
+           
 			$('#editor').focus();
 		}
 		
