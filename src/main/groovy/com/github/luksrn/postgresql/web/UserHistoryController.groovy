@@ -39,7 +39,7 @@ class UserHistoryController {
 		
 		def user = new User(username: principal.getName())
 		
-		Page history = sqlHistoryRepository.findByUserAndConnection( user, connection,  page )
+		Page history = sqlHistoryRepository.findByUserAndConnectionOrderByDateCreatedDesc( user, connection,  page )
  
 		model.addAttribute("userHistory", history.content )
 		model.addAttribute("userHistoryPage", new PageWrapper<UserWip>( history , "/console/history") )

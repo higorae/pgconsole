@@ -43,7 +43,7 @@ class UserHistoryControllerSpec extends Specification {
 		then:			
 			1 * connectionRepository.findOne( 1 ) >> new Connection()
 			1 * principal.getName() >> "luksrn"
-			1 * repository.findByUserAndConnection( _ as User, _ as Connection, page ) >> pageResult
+			1 * repository.findByUserAndConnectionOrderByDateCreatedDesc( _ as User, _ as Connection, page ) >> pageResult
 			1 * model.addAttribute("userHistory", pageResult.content )
 			1 * model.addAttribute("userHistoryPage",  _ as PageWrapper )
 			result == '_output_history :: user_history'	

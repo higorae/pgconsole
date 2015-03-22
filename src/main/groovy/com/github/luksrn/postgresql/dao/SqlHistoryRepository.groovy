@@ -12,5 +12,5 @@ import com.github.luksrn.postgresql.domain.User
 @Repository
 interface SqlHistoryRepository extends PagingAndSortingRepository<SqlHistory, Integer>{
 
-	Page<SqlHistory> findByUserAndConnection( User user, Connection connection , Pageable page )
+	Page<SqlHistory> findByUserAndConnectionOrderByDateCreatedDesc( User user, Connection connection , Pageable page )
 }
