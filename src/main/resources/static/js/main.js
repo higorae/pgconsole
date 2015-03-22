@@ -37,7 +37,8 @@ var sourceFancyTree = {
 
 
 var executeSqlHandler = function(){
-	var $loading = $('#ajax_loading').show();
+	$('input[id="execute-sql"]').prop('disabled', true);
+	$('#ajax_loading').show();
 	
 	selectionRange = editor.getSelectionRange(); 		
 	querystring = editor.session.getTextRange(selectionRange); 
@@ -51,13 +52,24 @@ var executeSqlHandler = function(){
         success : function(data) {			            
         	console.log(data); 
             $('#result').html(data);
+            
+
+            $('input[id="execute-sql"]').prop('disabled', false);
+            $('#ajax_loading').hide(); 
+            if ( $("*[id^='table_resultset']").length ){
+            	$("*[id^='table_resultset']").DataTable();
+            }
+                               
             return false;
         },
         error: function(xhr){ 
             console.log(xhr.responseText);
+            $('input[id="execute-sql"]').prop('disabled', false);
+            $('#ajax_loading').hide();
+            
         }
     })
-   $loading.hide();
+   
 	$('#editor').focus();
 }
 
