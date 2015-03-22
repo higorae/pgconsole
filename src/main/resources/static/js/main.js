@@ -15,25 +15,25 @@ var langTools = ace.require("ace/ext/language_tools");
  
 
 var rhymeCompleter = {
-        getCompletions: function(editor, session, pos, prefix, callback) {
-            if (prefix.length === 0) { callback(null, []); return }
-            
-            $.getJSON(
-            	"/console/autocomplete", {token :  prefix , idConnection : $( "#select_server" ).val() })
-            	.done (function(wordList) {  
-                    // wordList like [{"word":"flow","freq":24,"score":300,"flags":"bc","syllables":"1"}]
-                    callback(null, wordList.map(function(ea) {
-                        return {name: ea.word, value: ea.word, score: ea.score, meta: ea.flags}
-                    }));
-                });
-        }
-    };
+    getCompletions: function(editor, session, pos, prefix, callback) {
+        if (prefix.length === 0) { callback(null, []); return }
+        
+        $.getJSON(
+        	"/console/autocomplete", {token :  prefix , idConnection : $( "#select_server" ).val() })
+        	.done (function(wordList) {  
+                // wordList like [{"word":"flow","freq":24,"score":300,"flags":"bc","syllables":"1"}]
+                callback(null, wordList.map(function(ea) {
+                    return {name: ea.word, value: ea.word, score: ea.score, meta: ea.flags}
+                }));
+            });
+    }
+};
 langTools.addCompleter(rhymeCompleter);
 
 var sourceFancyTree = {
-		 url: "/serverExplorer",
-	     data: {mode: "children", connection:  $( "#select_server" ).val() },
-	}
+	 url: "/serverExplorer",
+     data: {mode: "children", connection:  $( "#select_server" ).val() },
+}
 
 
 var executeSqlHandler = function(){
@@ -101,8 +101,37 @@ editor.commands.addCommand({
 }); 
 
 
-document.getElementById('editor-preview-save').style.fontSize='16px';
-document.getElementById('editor').style.fontSize='16px';
+#('#editor-preview-save, #editor').css("font-size",'16px');
+
+// Create a server connection
+var selectServer = function(options) {
+	var settings = options;
+	$.ajax({
+        url : '/console/changeConnection',
+        data : { idConnection : settings.idConnection , code: settings.editor.session.getValue() } ,
+        type:"post",
+        dataType: 'json',
+        success : function(json) {
+        	settings.editor.setValue( json.code );	 	
+        	settings.editor.gotoLine(1, 0, false)
+        	$.getJSON( sourceFancyTree.url , {mode: "children", connection:  settings.idConnection } )
+        	 .done(function( json ) {
+        		console.log( "JSON Data: " + JSON.stringify(json) );
+        		$("#tree").fancytree("getTree").reload( json );
+        		swal( {title: "changed connection!", text:  json.message , type: "success"});
+        	}).fail(function( jqxhr, textStatus, error ) {
+            	var err = textStatus + ", " + error;
+            	console.log( "Request Failed: " + err );
+            	swal( {title: "changed connection failed!", text:  json.message , type: "error"});
+        	});
+
+        	return false;	                		                    
+        },
+        error: function(xhr){ 
+            console.log(xhr.responseText);
+        }
+    });
+}
 
 $(function(){
 
@@ -123,10 +152,10 @@ $(function(){
 	                dataType: 'text',
 	                success : function(data) {			 
 		                          	                	
-                		$('#objectDescription').html( data );
-               		 	$('pre code').each(function(i, block) {
-            		    	hljs.highlightBlock(block);
-            		  	});
+	            		$('#objectDescription').html( data );
+	           		 	$('pre code').each(function(i, block) {
+	        		    	hljs.highlightBlock(block);
+	        		  	});
 		                
 	                    return false;
 	                },
@@ -139,7 +168,7 @@ $(function(){
 		        // Display list of selected nodes
 		        var s = data.tree.getSelectedNodes().join(", ");
 		        $("#echoSelection1").text(s + " - " + data.node.data.type);
-
+	
 			    
 	            
 		      },
@@ -163,58 +192,29 @@ $(function(){
 		      }
 		 });
 	 
- 	setInterval(function(){ 
+	setInterval(function(){ 
 		connection = $( "#select_server" ).val()				 	
 		querystring = editor.session.getValue() 
 		$.ajax({
-            url :  '/console/autoSave', 
-            data : { code :  querystring , idConnection: connection } ,
-            type:"post",
-            dataType: 'json',
-            success : function(data) {			            	                	
-            	$('#save_status').html( '<span class="glyphicon glyphicon-ok"></span> ' + data.message );
-                return false;
-            },
-            error: function(xhr){ 
-                console.log(xhr.responseText);
-            }
-        })
-        
+	        url :  '/console/autoSave', 
+	        data : { code :  querystring , idConnection: connection } ,
+	        type:"post",
+	        dataType: 'json',
+	        success : function(data) {			            	                	
+	        	$('#save_status').html( '<span class="glyphicon glyphicon-ok"></span> ' + data.message );
+	            return false;
+	        },
+	        error: function(xhr){ 
+	            console.log(xhr.responseText);
+	        }
+	    })
+	    
 		$('#editor').focus();
 		
 	}, 60000); // 1 min
-    
+	
 	// Get selected text 
 	$('#execute-sql').click(executeSqlHandler);
-	
-	var selectServer = function(options) {
-		var settings = options;
-		$.ajax({
-            url : '/console/changeConnection',
-            data : { idConnection : settings.idConnection , code: settings.editor.session.getValue() } ,
-            type:"post",
-            dataType: 'json',
-            success : function(json) {
-            	settings.editor.setValue( json.code );	 	
-            	settings.editor.gotoLine(1, 0, false)
-            	$.getJSON( sourceFancyTree.url , {mode: "children", connection:  settings.idConnection } )
-            	 .done(function( json ) {
-            		console.log( "JSON Data: " + JSON.stringify(json) );
-            		$("#tree").fancytree("getTree").reload( json );
-            		swal( {title: "changed connection!", text:  json.message , type: "success"});
-            	}).fail(function( jqxhr, textStatus, error ) {
-                	var err = textStatus + ", " + error;
-                	console.log( "Request Failed: " + err );
-                	swal( {title: "changed connection failed!", text:  json.message , type: "error"});
-            	});
-
-            	return false;	                		                    
-            },
-            error: function(xhr){ 
-                console.log(xhr.responseText);
-            }
-        });
-	} 
 	
 	$( "#select_server" ).change(function(){
 		selectServer({
@@ -226,85 +226,83 @@ $(function(){
 	$("#link_reload_history").click(function(){
 		//$('#history').html('<asset:image src="ajax-loading.gif"/>');
 		$.ajax({
-            url : '/console/history',
-            data : { idConnection: $( "#select_server" ).val() } ,
-            type:"get",
-            dataType: 'html',
-            success : function(data) {			            	                	
-            	$('#history').html( data );
-            	 /* $('pre code').each(function(i, block) {
-            		    hljs.highlightBlock(block);
-            		  });
-       		   */
-                return false;
-            },
-            error: function(xhr){ 
-                console.log(xhr.responseText);
-            }
-        })
+	        url : '/console/history',
+	        data : { idConnection: $( "#select_server" ).val() } ,
+	        type:"get",
+	        dataType: 'html',
+	        success : function(data) {			            	                	
+	        	$('#history').html( data );
+	        	 /* $('pre code').each(function(i, block) {
+	        		    hljs.highlightBlock(block);
+	        		  });
+	   		   */
+	            return false;
+	        },
+	        error: function(xhr){ 
+	            console.log(xhr.responseText);
+	        }
+	    })
 	});
-
+	
 	$('#format-sql').click(function() {
 		connection = $( "#select_server" ).val()				 	
 		selectionRange = editor.getSelectionRange(); 		
 		querystring = editor.session.getTextRange(selectionRange);
 		
 		$.ajax({
-            url : '/console/sqlformatter',  
-            data : { code :  querystring , connectionId: connection } ,
-            type:"post",
-            dataType: 'json',
-            success : function(data) {	                
-            	editor.session.replace( selectionRange , data.code );	                	 
-                return false;
-            },
-            error: function(xhr){ 
-                console.log(xhr.responseText);
-            }
-        })
-        
+	        url : '/console/sqlformatter',  
+	        data : { code :  querystring , connectionId: connection } ,
+	        type:"post",
+	        dataType: 'json',
+	        success : function(data) {	                
+	        	editor.session.replace( selectionRange , data.code );	                	 
+	            return false;
+	        },
+	        error: function(xhr){ 
+	            console.log(xhr.responseText);
+	        }
+	    })
+	    
 		$('#editor').focus();
 	});
-
+	
 	// TO TOP
-      $('body').append('<div id="toTop" class="btn btn-info"><span class="glyphicon glyphicon-chevron-up"></span> Back to Top</div>');
-    	$(window).scroll(function () {
+	  $('body').append('<div id="toTop" class="btn btn-info"><span class="glyphicon glyphicon-chevron-up"></span> Back to Top</div>');
+		$(window).scroll(function () {
 			if ($(this).scrollTop() != 0) {
 				$('#toTop').fadeIn();
 			} else {
 				$('#toTop').fadeOut();
 			}
 		}); 
-    $('#toTop').click(function(){
-        $("html, body").animate({ scrollTop: 0 }, 600);
-        return false;
-    });
-    
-    
-    $("#logoff").click(function(){
+	$('#toTop').click(function(){
+	    $("html, body").animate({ scrollTop: 0 }, 600);
+	    return false;
+	});
+	
+	
+	$("#logoff").click(function(){
 		swal({
-			  title: "Are you sure?",
-			  text: "Do you really want to leave the system? Not saved queries will be lost!",
-			  type: "warning",
-			  showCancelButton: true,
-			  confirmButtonColor: "#DD6B55",
-			  confirmButtonText: "Yes!",
-			  cancelButtonText: "No, cancel plx!",
-			  closeOnConfirm: false
-			},
-			function(isConfirm){
-			  if (isConfirm) { 
-			   
-			    var jqxhr = $.get( "/logout", function() {
-			    	location.reload();
-				}) 
-				.fail(function() {
-					swal("Failed", "could not perform the operation", "error");
-				});
-			  } else {
-					return false;
-				}
+		  title: "Are you sure?",
+		  text: "Do you really want to leave the system? Not saved queries will be lost!",
+		  type: "warning",
+		  showCancelButton: true,
+		  confirmButtonColor: "#DD6B55",
+		  confirmButtonText: "Yes!",
+		  cancelButtonText: "No, cancel plx!",
+		  closeOnConfirm: false
+		},function(isConfirm){
+			if (isConfirm) { 
+				var jqxhr = $.get( "/logout", function() {
+				 location.reload();
+			}) 
+			.fail(function() {
+				swal("Failed", "could not perform the operation", "error");
 			});
+			} else {
+				return false;
+			}
+		});
 	});
 	  
 	
