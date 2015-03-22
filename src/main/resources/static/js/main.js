@@ -101,7 +101,7 @@ editor.commands.addCommand({
 }); 
 
 
-#('#editor-preview-save, #editor').css("font-size",'16px');
+$('#editor-preview-save, #editor').css("font-size",'16px');
 
 // Create a server connection
 var selectServer = function(options) {
