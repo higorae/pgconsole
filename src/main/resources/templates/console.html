@@ -207,9 +207,11 @@
 				 url: "/serverExplorer",
 			     data: {mode: "children", connection:  $( "#select_server" ).val() },
 			}
-		
+ 
 		
 		var executeSqlHandler = function(){
+			
+			$('input[id="execute-sql"]').prop('disabled', true);
 			$('#ajax_loading').show();
 			
 			selectionRange = editor.getSelectionRange(); 		
@@ -224,12 +226,15 @@
                 success : function(data) {			            
                 	console.log(data); 
                     $('#result').html(data);
-                    $('#ajax_loading').hide();
+                    $('input[id="execute-sql"]').prop('disabled', false);
+                    $('#ajax_loading').hide();                    
                     return false;
                 },
                 error: function(xhr){ 
                     console.log(xhr.responseText);
+                    $('input[id="execute-sql"]').prop('disabled', false);
                     $('#ajax_loading').hide();
+                    
                 }
             })
            
