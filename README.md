@@ -1,3 +1,13 @@
-This project aims to consolidate the application development learning with Spring Boot.
+Postgresql client that has some improvements (or not) over the pgAdmin version.
 
-The product is a simplified version of a postgresql client that has some improvements over the pgAdmin version ( In a very simplistic way ).
+
+Installation and Getting Started
+================================
+
+
+./gradlew bootRun
+
+If you want use a postgres database, you should override the default H2 profile with the argument " -Dspring.profiles.active=postgres", futhermore you need provide your credentials at src/main/resources/application-postgres.properties
+
+./gradlew bootRun -Dspring.profiles.active=postgres
+ 
