@@ -1,10 +1,9 @@
-package com.github.luksrn.postgresql.functional
+package com.github.luksrn.postgresql
 
 import geb.spock.GebSpec
  
 class LoginPageTest extends GebSpec {
 	
-	 
 	def "cat user get login page and sing in with default admin user?"() {
 		when:
         	to LoginPage
@@ -22,8 +21,5 @@ class LoginPageTest extends GebSpec {
  
 		then:
 			assert at(ConsolePage)
-			
-	 
-		 
     }
 }

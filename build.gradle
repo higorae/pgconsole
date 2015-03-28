@@ -1,141 +1,81 @@
 
-import org.apache.tools.ant.taskdefs.condition.Os
-
 buildscript {
-    repositories {
-        jcenter()
-        maven { url "http://repo.spring.io/snapshot" }
-        maven { url "http://repo.spring.io/milestone" }
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE")
-    }
-}
-// https://github.com/spring-projects/spring-boot/pull/592
-project.gradle.projectsEvaluated {
-	def springProfiles = project.gradle.startParameter.systemPropertiesArgs['spring.profiles.active']
-	if ( springProfiles ){
-		applicationDefaultJvmArgs = ["-Dspring.profiles.active=${project.gradle.startParameter.systemPropertiesArgs['spring.profiles.active']}"]
-	}    
-}
-
-ext {
-    // The drivers we want to use
-    
-	drivers = ["firefox", "chrome", "phantomJs"]
-
-     ext {
-        gebVersion = '0.10.0'
-        seleniumVersion = '2.45.0'
-        chromeDriverVersion = '2.10'
-		phantomJsVersion = '1.9.7'
-    } 
-}
-
-
-apply plugin: 'groovy'
-apply plugin: 'eclipse-wtp'
-apply plugin: 'idea'
-apply plugin: 'spring-boot' 
-apply plugin: 'war'
-
-apply from: "gradle/osSpecificDownloads.gradle"
-apply from: "gradle/ci.gradle"
-
-
-war {
-    baseName = 'postgresql'
-    version = '0.0.1-SNAPSHOT'
-}
-
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
-
-repositories {
-    mavenCentral()
-}
-
-configurations {
-    providedRuntime
-    testCompile.transitive = true
-}
- 
-
-dependencies {
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-security")
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compile("org.codehaus.groovy:groovy-all:2.3.6")
-    compile("com.google.guava:guava:18.0")
-    compile("org.flywaydb:flyway-core:3.0")
-
-    //providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
-	    
-    runtime("com.h2database:h2:1.4.186")
-    runtime('postgresql:postgresql:9.0-801.jdbc4')  
-    
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-	
-    testCompile("org.spockframework:spock-core:1.0-groovy-2.3")
-    
-    testCompile('cglib:cglib-nodep:2.2')
-    
-	// Restassured (Test for REST APIs)
-    testCompile('com.jayway.restassured:rest-assured:2.4.0')
-    testCompile('com.jayway.restassured:spring-mock-mvc:2.4.0')
-    testCompile('com.jayway.restassured:json-schema-validator:2.4.0')   
-    
-    // If using Spock, need to depend on geb-spock
-	testCompile "org.gebish:geb-spock:$gebVersion"
-    testCompile("org.gebish:geb-core:$gebVersion")
-    testCompile("org.seleniumhq.selenium:selenium-firefox-driver:2.45.0")
-    testCompile("org.seleniumhq.selenium:selenium-chrome-driver:2.45.0")
-	testRuntime("org.seleniumhq.selenium:selenium-support:2.45.0")
-	testCompile("com.github.detro.ghostdriver:phantomjsdriver:1.1.0") {
-		// phantomjs driver pulls in a different selenium version
-		transitive = false
+	repositories {
+		jcenter { url "http://jcenter.bintray.com/" }
+		maven { url "http://repo.spring.io/snapshot" }
+		maven { url "http://repo.spring.io/milestone" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE")
 	}
 }
 
-eclipse {
-    classpath {
-         containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7'
-    }
+
+	
+subprojects {
+	
+	apply plugin: 'spring-boot'
+	apply plugin: 'groovy'
+	apply plugin: 'eclipse-wtp'
+	apply plugin: 'idea'
+
+	sourceCompatibility = 1.6
+	targetCompatibility = 1.6
+
+	
+	// https://github.com/spring-projects/spring-boot/pull/592
+	project.gradle.projectsEvaluated {
+		def springProfiles = project.gradle.startParameter.systemPropertiesArgs['spring.profiles.active']
+		if ( springProfiles ){
+			applicationDefaultJvmArgs = ["-Dspring.profiles.active=${project.gradle.startParameter.systemPropertiesArgs['spring.profiles.active']}"]
+		}
+	}
+	
+	
+	ext {
+		// The drivers we want to use
+		
+		drivers = ["firefox", "chrome", "phantomJs"]
+	
+		 ext {
+			gebVersion = '0.10.0'
+			seleniumVersion = '2.45.0'
+			chromeDriverVersion = '2.10'
+			phantomJsVersion = '1.9.7'
+		}
+	}
+	
+	repositories {
+		mavenCentral()
+	}
+		
+	
+	 
+
+	eclipse {
+	    classpath {
+		 containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+		 containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7'
+	    }
+	} 
+
+	dependencies {
+		compile("org.codehaus.groovy:groovy-all:2.3.6")
+		compile("com.google.guava:guava:18.0") 
+		
+		testCompile('cglib:cglib-nodep:2.2')
+		
+		testCompile("org.springframework.boot:spring-boot-starter-test")
+	
+		testCompile("org.spockframework:spock-core:1.0-groovy-2.3")
+	}
 }
 
-
-drivers.each { driver ->
-    task "${driver}Test"(type: Test) {
-        reports {
-            html.destination = reporting.file("$name/tests")
-            junitXml.destination = file("$buildDir/test-results/$name")
-        }
-        outputs.upToDateWhen { false } // Always run tests
-        systemProperty "geb.build.reportsDir", reporting.file("$name/geb")
-        systemProperty "geb.env", driver
-    }
-}
-
-chromeTest {
-    dependsOn unzipChromeDriver
-    def chromedriverFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "chromedriver.exe" : "chromedriver"
-    systemProperty "webdriver.chrome.driver", new File(unzipChromeDriver.outputs.files.singleFile, chromedriverFilename).absolutePath
-}
- 
-
-phantomJsTest {
-	dependsOn unzipPhantomJs
-	def phantomJsFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "phantomjs.exe" : "bin/phantomjs"
-	systemProperty "phantomjs.binary.path", new File(unzipPhantomJs.outputs.files.singleFile, phantomJsFilename).absolutePath
-}
-
-test {
-    dependsOn drivers.collect { tasks["${it}Test"] }
-    //enabled = false
+configurations {
+	providedRuntime
+	testCompile.transitive = true
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.0'
+    gradleVersion = '2.3'
 }

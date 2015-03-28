@@ -1,4 +1,4 @@
-package com.github.luksrn.postgresql.functional
+package com.github.luksrn.postgresql
 
 import geb.Page
 

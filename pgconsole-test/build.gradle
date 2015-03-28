@@ -1,0 +1,54 @@
+
+import org.apache.tools.ant.taskdefs.condition.Os
+
+
+description = "Functional test for PGConsole Client"
+
+apply from: "gradle/osSpecificDownloads.gradle"
+apply from: "gradle/ci.gradle"
+ 
+version = '0.0.1-SNAPSHOT'
+	
+dependencies {
+   
+    // If using Spock, need to depend on geb-spock
+	testCompile "org.gebish:geb-spock:$gebVersion"
+    testCompile("org.gebish:geb-core:$gebVersion")
+    testCompile("org.seleniumhq.selenium:selenium-firefox-driver:2.45.0")
+    testCompile("org.seleniumhq.selenium:selenium-chrome-driver:2.45.0")
+	testRuntime("org.seleniumhq.selenium:selenium-support:2.45.0")
+	testCompile("com.github.detro.ghostdriver:phantomjsdriver:1.1.0") {
+		// phantomjs driver pulls in a different selenium version
+		transitive = false
+	}
+}
+
+drivers.each { driver ->
+    task "${driver}Test"(type: Test) {
+	reports {
+	    html.destination = reporting.file("$name/tests")
+	    junitXml.destination = file("$buildDir/test-results/$name")
+	}
+	outputs.upToDateWhen { false } // Always run tests
+	systemProperty "geb.build.reportsDir", reporting.file("$name/geb")
+	systemProperty "geb.env", driver
+    }
+}
+
+chromeTest {
+    dependsOn unzipChromeDriver
+    def chromedriverFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "chromedriver.exe" : "chromedriver"
+    systemProperty "webdriver.chrome.driver", new File(unzipChromeDriver.outputs.files.singleFile, chromedriverFilename).absolutePath
+}
+ 
+
+phantomJsTest {
+	dependsOn unzipPhantomJs
+	def phantomJsFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "phantomjs.exe" : "bin/phantomjs"
+	systemProperty "phantomjs.binary.path", new File(unzipPhantomJs.outputs.files.singleFile, phantomJsFilename).absolutePath
+}
+
+test {
+    dependsOn drivers.collect { tasks["${it}Test"] }
+    //enabled = false
+}

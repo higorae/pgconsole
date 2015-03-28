@@ -1,0 +1,4 @@
+rootProject.name = "pgconsole-project"
+
+include 'pgconsole'
+include 'pgconsole-test'
