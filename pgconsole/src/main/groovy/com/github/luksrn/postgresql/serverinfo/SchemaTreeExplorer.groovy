@@ -52,7 +52,7 @@ class SchemaTreeExplorer {
 			views << new View(name: row.table_name )
 		}
 		
-		def viewsRoot = [ title : (String) "\tViews (${tables.size})" , key: 'views_' + schema , icon: '/img/view.png']
+		def viewsRoot = [ title : (String) "\tViews (${views.size})" , key: 'views_' + schema , icon: '/img/view.png']
 		def viewMap = []
 		for ( view in views ){
 			def v = [ title: (String) "\t${view.name}" ,
@@ -66,8 +66,35 @@ class SchemaTreeExplorer {
 		 
 		viewsRoot['children'] = viewMap
 		
+		// ----
+		
+		def sequences = []
+		
+		sql.rows( sqlLookup.lookup("tree-explorer/map-sequence.sql") , [ param_schema : schema ]).each { Map row ->
+			sequences << new Sequence(name: row.seqname )
+		}
+		
+		def sequencesRoot = [ title : (String) "\tSequences (${sequences.size})" , key: 'views_' + schema , icon: '/img/sequence.png']
+		def sequencesMap = []
+		for ( sequence in sequences ){
+			def s = [ title: (String) "\t${sequence.name}" ,
+				key : sequence.name ,
+				icon: '/img/sequence.png' ,
+				lazy: true,
+				data : [ type: 'sequence', schema: schema , sequence: sequence.name  ]]
+			
+			sequencesMap << s
+		}
+		 
+		sequencesRoot['children'] = sequencesMap
+		
+		
+		
+		// ---
+		
 		schemaChildrens << tablesRoot
 		schemaChildrens << viewsRoot
+		schemaChildrens << sequencesRoot
 		
 		schemaChildrens
 	}
