@@ -74,7 +74,7 @@ class SchemaTreeExplorer {
 			sequences << new Sequence(name: row.seqname )
 		}
 		
-		def sequencesRoot = [ title : (String) "\tSequences (${sequences.size})" , key: 'views_' + schema , icon: '/img/sequence.png']
+		def sequencesRoot = [ title : (String) "\tSequences (${sequences.size})" , key: 'sequence_' + schema , icon: '/img/sequence.png']
 		def sequencesMap = []
 		for ( sequence in sequences ){
 			def s = [ title: (String) "\t${sequence.name}" ,
@@ -91,10 +91,55 @@ class SchemaTreeExplorer {
 		
 		
 		// ---
+		 
+		def functions = []
+		
+	    sql.rows( sqlLookup.lookup("tree-explorer/map-functions.sql") , [ param_schema : schema ]).each { Map row ->
+			functions << new Function(prooid: row.prooid, name: row.proname, proproto: row.proproto )
+		}
+		
+		def functionsRoot = [ title : (String) "\tFunctions (${functions.size})" , key: 'functions_' + schema , icon: '/img/function.png']
+		def functionsMap = []
+		for ( function in functions ){
+			def f = [ title: (String) "\t${function.name}" ,
+				key : function.name ,
+				icon: '/img/function.png' ,
+				lazy: true,
+				data : [ type: 'function', schema: schema , function: function.prooid  ]]
+			
+			functionsMap << f
+		}
+		 
+		functionsRoot['children'] = functionsMap
+		
+		
+		def triggers = []
+		
+		/*sql.rows( sqlLookup.lookup("tree-explorer/map-sequence.sql") , [ param_schema : schema ]).each { Map row ->
+			functions << new Function(prooid: row.prooid, name: row.proname, proproto: row.proproto )
+		}*/
+		
+		def triggersRoot = [ title : (String) "\tTriggers (${triggers.size})" , key: 'triggers_' + schema , icon: '/img/trigger.png']
+		def triggersMap = []
+		for ( trigger in triggers ){
+			def f = [ title: (String) "\t${trigger.name}" ,
+				key : trigger.name ,
+				icon: '/img/trigger.png' ,
+				lazy: true,
+				data : [ type: 'function', schema: schema , trigger: trigger.name  ]]
+			
+			triggersMap << f
+		}
+		 
+		triggersRoot['children'] = triggersMap
+		
+		
 		
 		schemaChildrens << tablesRoot
 		schemaChildrens << viewsRoot
 		schemaChildrens << sequencesRoot
+		schemaChildrens << functionsRoot
+		schemaChildrens << triggersRoot
 		
 		schemaChildrens
 	}
