@@ -1,7 +1,7 @@
 var editorPreviewSave = ace.edit("editor-preview-save");
 editorPreviewSave.setShowPrintMargin( false );  
 editorPreviewSave.setTheme("ace/theme/textmate");
-editorPreviewSave.getSession().setMode("ace/mode/sql");
+editorPreviewSave.getSession().setMode("ace/mode/pgsql");
 editorPreviewSave.setReadOnly(true); 
 
 
@@ -9,7 +9,7 @@ editorPreviewSave.setReadOnly(true);
 var editor = ace.edit("editor");
 editor.setShowPrintMargin( false );  
 editor.setTheme("ace/theme/textmate");
-editor.getSession().setMode("ace/mode/sql");
+editor.getSession().setMode("ace/mode/pgsql");
 editor.setOptions({enableBasicAutocompletion: true});
 var langTools = ace.require("ace/ext/language_tools");
  
