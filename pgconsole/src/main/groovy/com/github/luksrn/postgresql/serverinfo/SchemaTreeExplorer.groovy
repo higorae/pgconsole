@@ -126,7 +126,7 @@ class SchemaTreeExplorer {
 				key : trigger.name ,
 				icon: '/img/trigger.png' ,
 				lazy: true,
-				data : [ type: 'function', schema: schema , trigger: trigger.name  ]]
+				data : [ type: 'trigger', schema: schema , trigger: trigger.name  ]]
 			
 			triggersMap << f
 		}

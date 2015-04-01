@@ -7,15 +7,20 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 
 import com.github.luksrn.postgresql.serverinfo.TableObjectDescriptipon
+import com.github.luksrn.postgresql.serverinfo.ViewObjectDescription;
 
 @Controller
 class ObjectDescriptionController {
 	
 	TableObjectDescriptipon tableObjectDescriptipon
+	
+	ViewObjectDescription viewObjectDescription
 		
 	@Autowired
-	public ObjectDescriptionController(TableObjectDescriptipon tableObjectDescriptipon) {
+	public ObjectDescriptionController(TableObjectDescriptipon tableObjectDescriptipon,
+				ViewObjectDescription viewObjectDescription	) {
 		this.tableObjectDescriptipon = tableObjectDescriptipon;
+		this.viewObjectDescription = viewObjectDescription		
 	}
 
 
@@ -30,6 +35,8 @@ class ObjectDescriptionController {
 		switch ( type ){
 			case 'table':
 				return tableObjectDescriptipon.getDescription(schema, table)
+			case 'view':
+				return viewObjectDescription.getDescription(schema, view)
 			default:
 				return 'Not implemented.'				
 		}
