@@ -155,11 +155,11 @@ $(function(){
 			selectMode: 1,				
 			source: sourceFancyTree,
 			activate: function(event, data) {
-		        $("#echoActive1").text('SELECIONADO ' + data.node.title);
+		        
 		        var node = data.node;
 		        $.ajax({
 	                url : '/serverExplorer/objectDescription',
-	                data: {mode: "children", parent: node.key, type: node.data.type, database: node.data.database , schema: node.data.schema, table: node.data.table },
+	                data: {mode: "children", parent: node.key, type: node.data.type, database: node.data.database , schema: node.data.schema, table: node.data.table, view: node.data.view },
 	                type:"post",
 	                dataType: 'text',
 	                success : function(data) {			 
@@ -179,7 +179,7 @@ $(function(){
 		      select: function(event, data) {
 		        // Display list of selected nodes
 		        var s = data.tree.getSelectedNodes().join(", ");
-		        $("#echoSelection1").text(s + " - " + data.node.data.type);
+		       // $("#echoSelection1").text(s + " - " + data.node.data.type);
 	
 			    
 	            
