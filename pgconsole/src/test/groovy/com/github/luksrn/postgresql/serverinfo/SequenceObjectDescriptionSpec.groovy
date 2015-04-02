@@ -34,7 +34,7 @@ class SequenceObjectDescriptionSpec extends Specification {
 		then:
 			1 * currentConnectionResolver.getCurrentSqlConnection() >> sql
 			1 * sqlLookup.lookup('tree-explorer/sequence-description.sql') >> "SQL"
-			1 * sql.firstRow ( [ param_schema: 'public', param_view: 'test_seq' ] , "SQL" ) >> row
+			1 * sql.firstRow ( [ param_schema: 'public', param_sequence: 'test_seq' ] , "SQL" ) >> row
 			result == view
 		where:
 			view	|	row
@@ -87,14 +87,13 @@ CREATE SEQUENCE sequencia_teste
   START 1
   CACHE 1;
 ALTER TABLE sequencia_teste
-  OWNER TO lucas;
-"""
+  OWNER TO lucas;"""
 @Shared
 def ROW_B = [
 		sequence_name : 'sequencia_teste',
 			last_value: 1,
 			start_value: 1,
-			incremente_by: 1,
+			increment_by: 1,
 			max_value: 9223372036854775807,
 			min_value: 1,
 			cache_value: 1,
