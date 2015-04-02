@@ -159,7 +159,7 @@ $(function(){
 		        var node = data.node;
 		        $.ajax({
 	                url : '/serverExplorer/objectDescription',
-	                data: {mode: "children", parent: node.key, type: node.data.type, database: node.data.database , schema: node.data.schema, table: node.data.table, view: node.data.view },
+	                data: {mode: "children", parent: node.key, type: node.data.type, database: node.data.database , schema: node.data.schema, table: node.data.table, view: node.data.view , sequence: node.data.sequence },
 	                type:"post",
 	                dataType: 'text',
 	                success : function(data) {			 
