@@ -8,7 +8,7 @@ apply plugin: 'spring-boot'
 
 war {
     baseName = 'pgconsole'
-    version = '0.0.1-SNAPSHOT'
+    version = '0.1.x'
 }
 
 dependencies {
