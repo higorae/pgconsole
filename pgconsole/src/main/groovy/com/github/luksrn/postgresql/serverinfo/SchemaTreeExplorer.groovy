@@ -101,7 +101,7 @@ class SchemaTreeExplorer {
 		def functionsRoot = [ title : (String) "\tFunctions (${functions.size})" , key: 'functions_' + schema , icon: '/img/function.png']
 		def functionsMap = []
 		for ( function in functions ){
-			def f = [ title: (String) "\t${function.name}" ,
+			def f = [ title: (String) "\t${function.proproto}" ,
 				key : function.name ,
 				icon: '/img/function.png' ,
 				lazy: true,

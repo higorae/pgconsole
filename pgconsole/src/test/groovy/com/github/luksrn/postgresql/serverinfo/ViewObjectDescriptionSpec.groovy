@@ -7,6 +7,10 @@ import spock.lang.Specification
 import com.github.luksrn.postgresql.helper.CurrentConnectionResolver
 import com.github.luksrn.postgresql.helper.SqlLookup
 
+/**
+ * TODO http://www.postgresql.org/docs/9.3/static/sql-createview.html
+ *
+ */
 class ViewObjectDescriptionSpec extends Specification {
 
 	ViewObjectDescription instance;

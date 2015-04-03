@@ -8,6 +8,10 @@ import com.github.luksrn.postgresql.helper.SqlLookup;
 import spock.lang.Shared;
 import spock.lang.Specification;
 
+/**
+ * TODO http://www.postgresql.org/docs/8.1/static/sql-createsequence.html
+ *
+ */
 class SequenceObjectDescriptionSpec extends Specification {
 	
 	SequenceObjectDescription instance;
@@ -35,15 +39,15 @@ class SequenceObjectDescriptionSpec extends Specification {
 			1 * currentConnectionResolver.getCurrentSqlConnection() >> sql
 			1 * sqlLookup.lookup('tree-explorer/sequence-description.sql') >> "SQL"
 			1 * sql.firstRow ( [ param_schema: 'public', param_sequence: 'test_seq' ] , "SQL" ) >> row
-			result == view
+			result == sequence
 		where:
-			view	|	row
-			VIEW_A	|	ROW_A
-			VIEW_B	|	ROW_B
+			sequence	|	row
+			SEQUENCE_A	|	ROW_A
+			SEQUENCE_B	|	ROW_B
 	}
 
-@Shared
-def VIEW_A = """-- Sequence: public.sequencia_teste
+	@Shared
+	def SEQUENCE_A = """-- Sequence: public.sequencia_teste
 
 -- DROP SEQUENCE public.sequencia_teste;
 
@@ -75,8 +79,8 @@ def ROW_A = [ seqname: 'sequencia_teste',
 			nspname: 'public' ]
 
 
-@Shared
-def VIEW_B = """-- Sequence: public.sequencia_teste
+	@Shared
+	def SEQUENCE_B = """-- Sequence: public.sequencia_teste
 
 -- DROP SEQUENCE public.sequencia_teste;
 
