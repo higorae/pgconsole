@@ -1,7 +1,6 @@
 package com.github.luksrn.postgresql.serverinfo
 
-class View {
+class Trigger {
+
 	String name
-	
-	Schema schema
 }
