@@ -43,24 +43,24 @@ class SequenceObjectDescriptionSpec extends Specification {
 	}
 
 @Shared
-def VIEW_A = """-- Sequence: sequencia_teste
+def VIEW_A = """-- Sequence: public.sequencia_teste
 
--- DROP SEQUENCE sequencia_teste;
+-- DROP SEQUENCE public.sequencia_teste;
 
-CREATE SEQUENCE sequencia_teste
+CREATE SEQUENCE public.sequencia_teste
   INCREMENT 1
   MINVALUE 1
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
-ALTER TABLE sequencia_teste
+ALTER TABLE public.sequencia_teste
   OWNER TO lucas;
-COMMENT ON SEQUENCE sequencia_teste
+COMMENT ON SEQUENCE public.sequencia_teste
   IS 'teste';
 """
 @Shared
-def ROW_A = [
-		sequence_name : 'sequencia_teste', 
+def ROW_A = [ seqname: 'sequencia_teste',
+			sequence_name : 'sequencia_teste_seq',
 			last_value: 1, 
 			start_value: 1,
 			increment_by: 1, 
@@ -76,21 +76,21 @@ def ROW_A = [
 
 
 @Shared
-def VIEW_B = """-- Sequence: sequencia_teste
+def VIEW_B = """-- Sequence: public.sequencia_teste
 
--- DROP SEQUENCE sequencia_teste;
+-- DROP SEQUENCE public.sequencia_teste;
 
-CREATE SEQUENCE sequencia_teste
+CREATE SEQUENCE public.sequencia_teste
   INCREMENT 1
   MINVALUE 1
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
-ALTER TABLE sequencia_teste
+ALTER TABLE public.sequencia_teste
   OWNER TO lucas;"""
 @Shared
-def ROW_B = [
-		sequence_name : 'sequencia_teste',
+def ROW_B = [ seqname: 'sequencia_teste',
+			sequence_name : 'sequencia_teste_seq',
 			last_value: 1,
 			start_value: 1,
 			increment_by: 1,
