@@ -147,6 +147,9 @@ var selectServer = function(options) {
 
 $(function(){
 
+	$(window).bind('beforeunload', function(){
+		  return true;
+	});
 	
 	var $loading = $('#ajax_loading').hide();
   
