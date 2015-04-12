@@ -3,7 +3,7 @@ $(function(){
 	
     $("#alert_create_connection_success").hide();
 	
-	$("#pickColor").pickAColor();
+	$("#pickColor").pickAColor({showHexInput : false});
 
     var useGroupId = true;
 
