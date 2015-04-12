@@ -20,8 +20,6 @@ import com.github.luksrn.postgresql.web.form.NewConnectionForm
 @RestController
 @RequestMapping(value="connection")
 class ConnectionController {
-
-	static final String ID_CONNECTION_KEY = 'id_connection'
 	
 	ConnectionRepository connectionRepository
 	ServerGroupRepository serverGroupRepository
@@ -44,6 +42,10 @@ class ConnectionController {
         }
 		
 		def connection = connectionForm.buildObject()
+        if ( !connection.group.id ){
+			connection.group.user = new User( username: principal.getName() )
+            serverGroupRepository.save(connection.group)
+        }
 		connection.user = new User( username: principal.getName() )
 
 		connectionRepository.save(connection)

@@ -1,5 +1,8 @@
 package com.github.luksrn.postgresql.web.form
 
+import com.github.luksrn.postgresql.domain.User
+
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -24,9 +27,13 @@ class NewConnectionForm {
 	
 	@NotEmpty
 	String database
+
+	Integer groupId
+
+    String groupLabel
 	
-	@NotNull
-	Integer groupId;
+	@NotEmpty
+	String color;
 	
 	def buildObject(){
 		
@@ -36,8 +43,13 @@ class NewConnectionForm {
 											password: password, 
 											label: label, 
 											database: database)
-		connection.group.id = groupId
-		
+		// TODO Need implement cross field validations. 
+		if ( groupLabel ) {
+            connection.group.name = groupLabel
+        } else {
+            connection.group.id = groupId
+        }
+
 		connection		
 	}
 }

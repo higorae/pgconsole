@@ -233,6 +233,12 @@ $(function(){
 			editor: editor,
 			idConnection: $(this).val()
 		});
+		if ( $( "#select_server option:selected").val() > 0 ) {
+			var connection_color = $( "#select_server option:selected" ).attr("style");
+			$( "#select_server" ).attr("style", connection_color);
+		} else {
+			$( "#select_server" ).attr("style", "#ffffff");
+		}
 	});
 	
 	$("#link_reload_history").click(function(){

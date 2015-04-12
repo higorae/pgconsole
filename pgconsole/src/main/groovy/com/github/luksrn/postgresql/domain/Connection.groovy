@@ -36,6 +36,8 @@ class Connection {
 	@JoinColumn(name="id_user")
 	User user = new User()
 	
+	String color
+	
 	String getDescription(){
 		"${group} - jdbc:postgresql://${host}:${port}/${database} - User: ${username}"
 	}

@@ -38,7 +38,7 @@ xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 						      	<option value="0">Select one connection</option>
 						      	
 						      	<option th:each="connection : ${connections}" 
-								          th:value="${connection.id}" 
+								          th:value="${connection.id}" th:style="${'background-color:#' + connection.color}"
 								          th:text="${connection.description}">Connection Server 01</option>
 								           
 							</select>
