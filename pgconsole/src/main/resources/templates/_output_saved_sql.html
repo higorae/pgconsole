@@ -37,7 +37,7 @@ xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 					<tr th:each="row : ${savedSqls}">
 						
 						<td style="width: 10%">
-							<span th:text="${tag.name}" th:each="tag : ${row.tags}"></span>
+							<span class="badge" th:text="${tag.name}" th:each="tag : ${row.tags}"></span>
 							
 						</td>
 						
