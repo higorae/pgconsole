@@ -1,0 +1,85 @@
+ <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+ 
+<head>
+</head>
+ 
+<body>
+	<div th:fragment="saved_sqls" th:unless="${#lists.isEmpty(savedSqls)}" class="results-block">
+	 		  
+	 	<div layout:include="_datatable_page_info :: paginationbar" th:with="page=${savedSqlsPage},render='#savedsql'">
+		</div> 
+		
+		
+		 <div class="table-responsive">
+		     <table  class="table table-bordered">
+			 
+				<thead>
+					<tr>
+					
+						<td>						
+							<b th:text="Tag">Tag</b>
+						</td>
+						
+						<td>						
+							<b th:text="Date">Date</b>
+						</td>
+					 
+						<td>						
+							<b th:text="SQL">SQL</b>
+						</td>
+					</tr>	 
+					 
+				</thead>
+				<tbody>
+					
+					<tr th:each="row : ${savedSqls}">
+						
+						<td style="width: 10%">
+							<span th:text="${tag.name}" th:each="tag : ${row.tags}"></span>
+							
+						</td>
+						
+						<td style="width: 10%">
+							<span th:text="${#dates.format(row.dateCreated, 'dd/MM/yyyy hh:mm:ss')}"></span>
+						</td>
+						
+						<td>
+							 
+							<div id="editor-preview-sql-saved" th:id="|editor-preview-sql-saved-${row.id}|" class="my-code-area"  style="width: 100%; height:150px;"  th:text="${row.code}">${row.code}</div>
+							<script th:inline="javascript">		 
+								/*[+
+		
+								var id  = '[[${row.id}]]';
+		
+								+]*/
+								var e = ace.edit("editor-preview-sql-saved-" + id);
+								e.setShowPrintMargin( false );  
+								e.setTheme("ace/theme/textmate");
+								e.getSession().setMode("ace/mode/sql");
+								e.setReadOnly(true); 
+	
+								document.getElementById("editor-preview-history-" + id).style.fontSize='16px';
+								
+							</script>
+																	
+						</td>
+						
+											
+					</tr>				
+					
+				</tbody>
+			</table>
+			
+			
+		</div>
+		
+		<div layout:include="_datatable_page_info :: paginationbar" th:with="page=${savedSqlsPage},render='#savedsql'">
+		</div> 
+			
+	</div>
+	
+	 
+</body>  
+</html>

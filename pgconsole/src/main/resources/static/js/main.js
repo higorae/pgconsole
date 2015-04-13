@@ -325,6 +325,24 @@ $(function(){
 			}
 		});
 	});
+	
+	$("#link_reload_saved_sqls").click(function(){
+		//$('#history').html('<asset:image src="ajax-loading.gif"/>');
+		$.ajax({
+	        url : '/savedsql/search',
+	        data : { idConnection: $( "#select_server" ).val() } ,
+	        type:"get",
+	        dataType: 'html',
+	        success : function(data) {			            	                	
+	        	$('#savedsql').html( data );	        	 
+	            return false;
+	        },
+	        error: function(xhr){ 
+	            console.log(xhr.responseText);
+	        }
+	    })
+	});
+	
 	  
 	
   });
