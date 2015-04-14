@@ -92,7 +92,7 @@ xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 								var e = ace.edit("editor-preview-sql-saved-" + id);
 								e.setShowPrintMargin( false );  
 								e.setTheme("ace/theme/textmate");
-								e.getSession().setMode("ace/mode/sql");
+								e.getSession().setMode("ace/mode/pgsql");
 								e.setReadOnly(true); 
 	
 								document.getElementById("editor-preview-sql-saved-" + id).style.fontSize='16px';
