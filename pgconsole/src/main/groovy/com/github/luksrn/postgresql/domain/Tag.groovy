@@ -22,5 +22,9 @@ class Tag {
 	@JoinColumn(name="id_user")
 	User user
 	
-	String name	
+	String name
+	
+	String toString(){
+		name
+	}	
 }

@@ -78,8 +78,12 @@ var saveSqlHandler = function(){
 	querystring = editor.session.getTextRange(selectionRange); 			
 	editorPreviewSave.setValue(querystring)
 	editorPreviewSave.gotoLine(1, 0, false)
-	$("#save-modal-title").text( $("#select_server option:selected").text() )
+	$("#save-modal-title").text( $("#select_server option:selected").text() )	
 	
+	$("#title-save-sql").val("")
+	$("#description").val("")
+	$("#tags").val("")
+
 	$('#title-save-sql').focus();
 	$("#save-sql").modal("show")
 }
@@ -343,6 +347,40 @@ $(function(){
 	    })
 	});
 	
+	
+	$("#link_save_sqls").click(function(){
+	 
+		$.ajax({
+	        url : '/console/savesql',
+	        data : { 
+	        	idConnection: $( "#select_server" ).val(),
+	        	title: $("#title-save-sql").val(),
+	        	description: $("#description").val(),
+	        	tags: $("#tags").val(),
+	        	code: editorPreviewSave.getSession().getValue()
+	        },
+	        type:"post",
+	        dataType: 'json',
+	        success : function(data) {			            	                	
+	        	console.log(data);	     
+	        	  
+	        	 var $modal = $('#new-connection');
+
+	        	//when hidden
+	        	 $modal.on('hidden.bs.modal', function(e) { 
+	        	  return this.render(); //DOM destroyer
+	        	});
+
+	        	$modal.modal('hide'); //start hiding
+	        	
+	        	 swal( {title: "SQL saved!", text:  "Your sql was saved with success!" , type: "success"});
+	            return false;
+	        },
+	        error: function(xhr){ 
+	            console.log(xhr.responseText);
+	        }
+	    })
+	});
 	  
 	
   });

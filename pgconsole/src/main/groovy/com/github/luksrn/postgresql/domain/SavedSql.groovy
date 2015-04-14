@@ -27,6 +27,10 @@ class SavedSql {
 	@ManyToOne
 	@JoinColumn(name="id_connection")
 	Connection connection
+	
+	String title
+	
+	String description
 			
 	Date dateCreated
 		
@@ -36,5 +40,15 @@ class SavedSql {
 	@JoinTable(name="saved_sql_tag",
 		joinColumns=@JoinColumn(name="id_saved_sql", referencedColumnName="id"),
 		inverseJoinColumns=	@JoinColumn(name="id_tag", referencedColumnName="id"))
-	List<Tag> tags
+	List<Tag> tags = new ArrayList<Tag>()
+	
+	def getFullDescription(){
+		"""
+--Title: ${title}
+--Description: ${description}
+-- tags: ${tags}
+
+${code}
+		"""
+	}
 }

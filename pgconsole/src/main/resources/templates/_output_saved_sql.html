@@ -11,23 +11,57 @@ xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 	 	<div layout:include="_datatable_page_info :: paginationbar" th:with="page=${savedSqlsPage},render='#savedsql'">
 		</div> 
 		
-		
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+			
+				<form class="form-horizontal">
+				  <div class="form-group">
+				    <label for="filter_title" class="col-sm-2 control-label">Title</label>
+				    <div class="col-sm-10">
+				     
+				      <input type="text" class="form-control" id="filter_title" placeholder="Title"/>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="filter_tag" class="col-sm-2 control-label">Tags</label>
+				    <div class="col-sm-10">			   	 
+				      <input type="text" class="form-control" id="filter_tag" placeholder="Tags"  data-role="tagsinput"/>
+				    </div>
+				  </div>
+				  
+				  <div class="form-group">
+				    <label for="filter_contains_Sql" class="col-sm-2 control-label">Contains SQL</label>
+				    <div class="col-sm-10">			   	 
+				      <input type="text" class="form-control" id="filter_contains_Sql" placeholder="SQL"  />
+				    </div>
+				  </div>
+				  
+				  
+				  <div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				      <button type="submit" class="btn btn-default   btn-xs">Search</button>
+				    </div>
+				  </div>
+				</form>
+			</div>
+		</div>
 		 <div class="table-responsive">
 		     <table  class="table table-bordered">
 			 
 				<thead>
 					<tr>
-					
+					 
 						<td>						
-							<b th:text="Tag">Tag</b>
-						</td>
-						
-						<td>						
-							<b th:text="Date">Date</b>
+							<b th:text="Date">Date / Tag</b>
 						</td>
 					 
 						<td>						
 							<b th:text="SQL">SQL</b>
+						</td>
+						
+						
+						<td>						
+							<b th:text="Actions"></b>
 						</td>
 					</tr>	 
 					 
@@ -36,18 +70,19 @@ xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 					
 					<tr th:each="row : ${savedSqls}">
 						
-						<td style="width: 10%">
-							<span class="badge" th:text="${tag.name}" th:each="tag : ${row.tags}"></span>
-							
-						</td>
+					 
 						
 						<td style="width: 10%">
 							<span th:text="${#dates.format(row.dateCreated, 'dd/MM/yyyy hh:mm:ss')}"></span>
+							
+							<span class="badge" th:text="${tag.name}" th:each="tag : ${row.tags}"></span>
 						</td>
 						
 						<td>
 							 
-							<div id="editor-preview-sql-saved" th:id="|editor-preview-sql-saved-${row.id}|" class="my-code-area"  style="width: 100%; height:150px;"  th:text="${row.code}">${row.code}</div>
+							<div id="editor-preview-sql-saved" th:id="|editor-preview-sql-saved-${row.id}|" class="my-code-area"  style="width: 100%; height:150px;"  th:text="${row.fullDescription}">
+								${row.code}
+							</div>
 							<script th:inline="javascript">		 
 								/*[+
 		
@@ -60,10 +95,17 @@ xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 								e.getSession().setMode("ace/mode/sql");
 								e.setReadOnly(true); 
 	
-								document.getElementById("editor-preview-history-" + id).style.fontSize='16px';
+								document.getElementById("editor-preview-sql-saved-" + id).style.fontSize='16px';
 								
 							</script>
 																	
+						</td>
+						
+						
+						<td style="width: 5%">
+							<form action="#">
+								 <button type="submit" class="btn btn-danger   btn-xs">Remove</button>
+							</form>
 						</td>
 						
 											
