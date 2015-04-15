@@ -7,15 +7,12 @@ CREATE TABLE saved_sql
   code text NULL,
   date_created timestamp NOT NULL,
   CONSTRAINT saved_sql_pkey PRIMARY KEY (id),
-  CONSTRAINT fk_user_wip_user FOREIGN KEY (id_user)
-      REFERENCES users (username) MATCH SIMPLE
+  CONSTRAINT fk_user FOREIGN KEY (id_user)
+      REFERENCES users (username) 
       ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT fk_user_wip_connection FOREIGN KEY (id_connection)
-      REFERENCES connection (id) MATCH SIMPLE
+  CONSTRAINT fk_saved_sql_user_connection FOREIGN KEY (id_connection)
+      REFERENCES connection (id) 
       ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-WITH (
-  OIDS=FALSE
 ); 
 
 
@@ -28,14 +25,11 @@ CREATE TABLE tag
 (
   id integer NOT NULL,
   id_user varchar(50),
-  name varchar(255)  
+  name varchar(255),
   CONSTRAINT tag_pkey PRIMARY KEY (id),
   CONSTRAINT fk_tag_user FOREIGN KEY (id_user)
-      REFERENCES users (username) MATCH SIMPLE
+      REFERENCES users (username) 
       ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-WITH (
-  OIDS=FALSE
 ); 
 
 
@@ -49,12 +43,9 @@ CREATE TABLE saved_sql_tag
   id_saved_sql integer not null,
   id_tag integer not null,
   CONSTRAINT fk_id_saved_sql FOREIGN KEY (id_saved_sql)
-      REFERENCES saved_sql (id) MATCH SIMPLE
+      REFERENCES saved_sql (id) 
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT fk_id_tag FOREIGN KEY (id_tag)
-      REFERENCES tag (id) MATCH SIMPLE
+      REFERENCES tag (id) 
       ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-WITH (
-  OIDS=FALSE
 ); 
