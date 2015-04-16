@@ -42,7 +42,8 @@ class NewConnectionForm {
 											username: username, 
 											password: password, 
 											label: label, 
-											database: database)
+											database: database,
+											color: color)
 		// TODO Need implement cross field validations. 
 		if ( groupLabel ) {
             connection.group.name = groupLabel

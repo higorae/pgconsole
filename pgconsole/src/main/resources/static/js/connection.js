@@ -46,6 +46,7 @@ $(function(){
             		database: $("#database").val(),
             		username: $("#username").val(),
             		password: $("#password").val(),
+            		color: $("#pickColor").val(),
             		groupId: useGroupId ? $("#groupId").val() : null ,
                     groupLabel: !useGroupId ? $("#groupLabel").val() : null } ,
             type:"post",
