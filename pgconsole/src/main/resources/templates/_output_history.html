@@ -6,7 +6,7 @@ xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 </head>
  
 <body>
-	<div th:fragment="user_history" th:unless="${#lists.isEmpty(userHistory)}" class="results-block">
+	<div th:fragment="user_history"  class="results-block">
 	 		  
 	 	<div layout:include="_datatable_page_info :: paginationbar" th:with="page=${userHistoryPage},render='#history'">
 		</div> 
@@ -42,7 +42,7 @@ xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 		</div>
 
 		
-		 <div class="table-responsive">
+		 <div class="table-responsive" th:unless="${#lists.isEmpty(userHistory)}">
 		 
 		     <table  class="table table-bordered">
 			 
@@ -68,7 +68,7 @@ xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 						
 						<td>
 							 
-							<div id="editor-preview-history" th:id="|editor-preview-history-${row.id}|" class="my-code-area"  style="width: 100%; height:150px;"  th:text="${row.sql}">${row.sql}</div>
+							<div id="editor-preview-history" th:id="|editor-preview-history-${row.id}|" class="my-code-area"  style="width: 100%; height:250px;"  th:text="${row.sql}">${row.sql}</div>
 							<script th:inline="javascript">		 
 								/*[+
 		

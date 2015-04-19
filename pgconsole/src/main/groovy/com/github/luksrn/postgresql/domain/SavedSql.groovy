@@ -43,12 +43,8 @@ class SavedSql {
 	List<Tag> tags = new ArrayList<Tag>()
 	
 	def getFullDescription(){
-		"""
---Title: ${title}
+		"""--Title: ${title}
 --Description: ${description}
--- tags: ${tags}
-
-${code}
-		"""
+${code}"""
 	}
 }

@@ -9,5 +9,7 @@ import com.github.luksrn.postgresql.domain.Tag
 interface TagRepository extends CrudRepository<Tag, Integer>{
 	
 	Tag findByName(String name)
+	
+	List<Tag> findByNameIn(List<String> names)
 
 }

@@ -15,6 +15,7 @@ import com.github.luksrn.postgresql.domain.Connection
 import com.github.luksrn.postgresql.domain.SavedSql
 import com.github.luksrn.postgresql.domain.User
 import com.github.luksrn.postgresql.utils.PageWrapper
+import com.github.luksrn.postgresql.web.form.QuerySaveSqlForm
 
 
 class QuerySavedSqlControllerSpec extends Specification {
@@ -36,21 +37,22 @@ class QuerySavedSqlControllerSpec extends Specification {
 	}
 	
 	def "Show latest sql saved by the user authenticated"(){
-		def idConnection = 1;
+	 
+		def form = new QuerySaveSqlForm(idConnection: 1)
 		def con = new Connection()
 		def content = [ new SavedSql() ]
 		Page<SavedSql> pageResult = new PageImpl<SavedSql>(content)
 		
 		when:
-			def result = instance.search(idConnection, principal, model, page )
+			def result = instance.search(form, principal, model, page )
 		then:
 			1 * principal.getName() >> "luksrn"
-			1 * connectionRepository.findOne(idConnection) >> con
-			1 * savedSqlRepository.findByUserAndConnectionOrderByDateCreatedDesc(_ as User, _ as Connection, page ) >> pageResult			
+			1 * connectionRepository.findOne(1) >> con
+			1 * savedSqlRepository.findByUserAndConnectionOrderByDateCreatedDesc(_ as User, _ as Connection, page ) >> pageResult
+			1 * model.addAttribute("querySaveSqlForm", form)		
 			1 * model.addAttribute("savedSqls", pageResult.content )
 			1 * model.addAttribute("savedSqlsPage",  _ as PageWrapper )
 			result == '_output_saved_sql :: saved_sqls'
 		
 	}
-
 }

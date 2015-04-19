@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
+import javax.persistence.ManyToMany
 import javax.persistence.ManyToOne
 import javax.persistence.SequenceGenerator
 import javax.persistence.Table
@@ -23,6 +24,9 @@ class Tag {
 	User user
 	
 	String name
+	
+	@ManyToMany(mappedBy = "tags")
+	List<SavedSql> savedSqls
 	
 	String toString(){
 		name

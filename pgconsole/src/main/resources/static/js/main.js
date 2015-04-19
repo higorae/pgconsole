@@ -150,7 +150,8 @@ var selectServer = function(options) {
 }
 
 $(function(){
-
+ 
+	 
 	$(window).bind('beforeunload', function(){
 		  return true;
 	});
