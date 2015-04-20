@@ -24,6 +24,7 @@
 								<span class="glyphicon glyphicon-remove" th:if="${ ! resultMetaData.executedWithSuccess}"></span>
 									 						
 								<b th:text="${resultMetaData.statement}"> SELECT foo FROM bar</b> - <span th:text="|Execution time: ${{resultMetaData.executionTime}} ms. ${{resultMetaData.numberOfRowsAffected}} rows affected|">Execution time: 001 ms. 350 rows affected</span>
+								<span th:unless="${!resultMetaData.appendLimit}" th:text="|Was applied one limit of 100 for this query.|">Was applied one limit of 100 for this query.</span>
 							</td>
 						</tr>
 					 

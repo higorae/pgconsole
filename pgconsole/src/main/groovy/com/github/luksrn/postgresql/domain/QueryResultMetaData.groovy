@@ -17,7 +17,12 @@ class QueryResultMetaData {
 	
 	Integer numberOfRowsAffected
 	
+	Boolean appendLimit = false
+	
 	String getStatement(){
+		if ( query?.isSelect() ){
+			return query?.statementWithLimit
+		}
 		query?.statement
 	}
 	
@@ -37,8 +42,7 @@ class QueryResultMetaData {
 		firstRow.collect {
 			it.key
 		}
-	}
-	 
+	}	 
 	
 	List getRows(){
 		result

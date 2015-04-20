@@ -27,6 +27,20 @@ class SqlStatement {
 		checkIfStartWith("select")
 	}
 	
+	boolean containsLimit(){
+		statement?.contains("LIMIT") || statement?.contains("limit")
+	}
+	
+	String getStatementWithLimit(){
+		if ( !isSelect() ){
+			throw new IllegalStateException("Statement is not a SELECT. Statement is: ${statement}")
+		}
+		if ( containsLimit() ){
+			return statement
+		}
+		"${statement} LIMIT 100"
+	}
+	
 	private boolean checkIfStartWith( String text ){
 		getStatementNormalized().startsWith( text )
 	}

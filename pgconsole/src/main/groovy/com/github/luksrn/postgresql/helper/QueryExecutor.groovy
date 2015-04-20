@@ -34,7 +34,8 @@ class QueryExecutor {
 					QueryResultMetaData queryResultMetaDeta = new QueryResultMetaData( query: query , startTime: new Date() , executedWithSuccess: true)
 					try {
 						if ( query.isSelect() ){
-							connection.rows( query.statement ).each { Map row ->
+							queryResultMetaDeta.appendLimit = !query.containsLimit()
+							connection.rows( query.getStatementWithLimit() ).each { Map row ->
 								queryResultMetaDeta.result << row
 							}
 							queryResultMetaDeta.numberOfRowsAffected = queryResultMetaDeta.result.size
