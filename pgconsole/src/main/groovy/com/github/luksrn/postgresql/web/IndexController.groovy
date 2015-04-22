@@ -27,9 +27,10 @@ class IndexController {
 	
 	@RequestMapping(value="/")
 	String index(Model model, Principal principal){		
-		model.addAttribute("connections", connectionRepository.findAll() ) 
+		def user = new User(username: principal.name )
+		model.addAttribute("connections", connectionRepository.findByUser( user) ) 
 		model.addAttribute("connection", new NewConnectionForm() )
-		model.addAttribute("serverGroups", serverGroupRepository.findAllByUser( new User(username: principal.name ) ))
+		model.addAttribute("serverGroups", serverGroupRepository.findAllByUser( user ))
 
 		"console"
 	}
