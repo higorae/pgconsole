@@ -133,7 +133,9 @@ var selectServer = function(options) {
         	$.getJSON( sourceFancyTree.url , {mode: "children", connection:  settings.idConnection } )
         	 .done(function( json ) {
         		console.log( "JSON Data: " + JSON.stringify(json) );
-        		$(".tree").fancytree("getTree").reload( json );
+        		$(".tree").each(function() {
+              $(this).fancytree("getTree").reload( json );
+            });
         		swal( {title: "changed connection!", text:  json.message , type: "success"});
         	}).fail(function( jqxhr, textStatus, error ) {
             	var err = textStatus + ", " + error;
